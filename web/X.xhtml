@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head id='head_t'>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width initial-scale=1.0"/>
+<link rel="stylesheet" href="#{request.contextPath}/resources/bootstrap/css/bootstrap.css"
+      type="text/css"/>
+<h:outputScript library="js" name="jquery.js" />
+<h:outputScript library="js"  name="bootstrap.js" />
+
+<title>Google Chart - JSF 2</title>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+// Load the Visualization API and the piechart package.
+google.load('visualization', '1.0', {
+'packages' : [ 'corechart' ]
+});
+
+// Set a callback to run when the Google Visualization API is loaded.
+google.setOnLoadCallback(drawChart);
+
+// Callback that creates and populates a data table,
+// instantiates the pie chart, passes in the data and
+// draws it.
+function drawChart() {
+// Create the data table.
+var data = google.visualization.arrayToDataTable([
+[ 'Country', 'Area(square km)' ],
+#{PieChartMBean.pieChartData}
+]);
+
+// Set chart options
+var options = {
+'title' : 'Grafica',
+is3D : true,
+pieSliceText : 'label',
+tooltip : {
+showColorCode : true
+},
+'width' : 900,
+'height' : 500
+};
+
+// Instantiate and draw our chart, passing in some options.
+var chart = new google.visualization.PieChart(document
+.getElementById('chart_div'));
+chart.draw(data, options);
+}
+</script>
+</h:head>
+<h:body>
+    <div class="container">
+        
+        <div class="col-sm-9">
+
+               <div class="panel-group">
+                   <div class="panel panel-info">
+                           <div style="border-color: #000;">
+                           <div id="chart_div" class="container"></div>
+                           </div>
+
+                   </div>
+               </div>
+        </div>
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel-heading"><h2>Lista de Datos</h2></div>
+                <h:panelGroup>
+                    <h:dataTable value="#{PieChartMBean.pieChartData}" class="table table-responsive table-bordered table-striped">
+                    <h:column>
+                        <f:facet name="header">Item</f:facet>#{PieChartMBean.pieChartData}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Valor</f:facet>#{PieChartMBean.pieChartData}
+                    </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </div>
+        </div>
+    </div>
+    
+</h:body>
+</html>
